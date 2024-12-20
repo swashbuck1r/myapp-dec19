@@ -29,5 +29,5 @@ jobs:
         shell: bash
         run: |
           echo "Printing dispatch..."
-          echo ${{steps.dispatch_json.dispatch.json}}
+          echo ${{steps.dispatch_json.outputs.dispatch.json}}
 
