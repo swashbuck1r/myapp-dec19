@@ -4,6 +4,9 @@ name: My workflow
 on:
   workflow_dispatch:
 jobs:
+  env:
+    ORG_ID: 484e57bd-7b0b-4a37-448b-ab8ca8f9a684
+    APP_ID: dcaf825d-c6a1-43bd-8fb6-016e8a66335e
   build:
     steps:
       - name: Say hello
@@ -11,3 +14,9 @@ jobs:
         shell: sh
         run: |
           echo "hello world"
+      - name: Get application
+        uses: docker://golang:1.20.3-alpine3.17
+        shell: sh
+        run: |
+          curl -n -X POST -H "Authorization: ${{ secrets.CBP_PAT }}" -H "Content-Type: application/json" -H "Accept: application/json" -d '{}' ${{ cloudbees.api.url }}/v1/organizations/$ORG_ID/services/$APP_ID -v
+
