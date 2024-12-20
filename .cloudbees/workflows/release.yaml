@@ -26,8 +26,8 @@ jobs:
           echo "Saving dispatch as file..."
           echo "${{steps.dispatch_json.outputs.dispatch}}"
           echo "${{steps.dispatch_json.outputs.dispatch}}" > $CLOUDBEES_WORKSPACE/dispatch_requests.json
-      - name: Dispatch Workflows
-        uses: cloudbees-io/workflows-dispatch@main
-        with:
-          workflows-dispatch-file: dispatch_requests.json
-          token: "${{ secrets.CBP_PAT }}"
+      # - name: Dispatch Workflows
+      #   uses: cloudbees-io/workflows-dispatch@main
+      #   with:
+      #     workflows-dispatch-file: dispatch_requests.json
+      #     token: "${{ secrets.CBP_PAT }}"
