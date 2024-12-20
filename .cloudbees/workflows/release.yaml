@@ -16,10 +16,18 @@ jobs:
         shell: sh
         run: |
           echo "hello world"
-      - name: Get application
+      - name: Calculate dispatch JSON
+        id: dispatch_json
         uses: docker://swashbuck1r/quickstart-tools:0.0.1
         shell: bash
         run: |
           set -x
-          curl -H "Authorization: Bearer ${{ secrets.CBP_PAT }}" -H "Accept: application/json" ${{ cloudbees.api.url }}/v1/organizations/$ORG_ID/services/$APP_ID | jq
+          curl -H "Authorization: Bearer ${{ secrets.CBP_PAT }}" -H "Accept: application/json" ${{ cloudbees.api.url }}/v1/organizations/$ORG_ID/services/$APP_ID | jq -r '[.service.linkedComponentIds[] | {"component_id": .,"branch_name": "main", "workflow_file_name": "deploy.yaml"}]' > $CLOUDBEES_OUTPUTS/dispatch.json
+          cat $CLOUDBEES_OUTPUTS/dispatch.json
+      - name: Deploy components
+        uses: docker://swashbuck1r/quickstart-tools:0.0.1
+        shell: bash
+        run: |
+          echo "Printing dispatch..."
+          echo ${{steps.dispatch_json.dispatch.json}}
 
