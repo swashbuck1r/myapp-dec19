@@ -20,5 +20,5 @@ jobs:
         uses: docker://swashbuck1r/quickstart-tools:0.0.1
         shell: sh
         run: |
-          curl -X GET -H "Authorization: ${{ secrets.CBP_PAT }}" -H "Content-Type: application/json" -H "Accept: application/json" -d '{}' ${{ cloudbees.api.url }}/v1/organizations/$ORG_ID/services/$APP_ID | jq
+          curl -v -H "Authorization: ${{ secrets.CBP_PAT }}" -H "Content-Type: application/json" -H "Accept: application/json" -d '{}' ${{ cloudbees.api.url }}/v1/organizations/$ORG_ID/services/$APP_ID | jq
 
