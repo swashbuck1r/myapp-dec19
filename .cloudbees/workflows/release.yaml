@@ -25,10 +25,9 @@ jobs:
         run: |
           echo "Saving dispatch as file..."
           echo "${{steps.dispatch_json.outputs.dispatch}}"
-          cat << EOF
+          <<EOF > ${{cloudbees.workspace}}/dispatch_requests.json
           ${{steps.dispatch_json.outputs.dispatch}}
           EOF
-          | jq > ${{cloudbees.workspace}}/dispatch_requests.json
           echo "dump workspace dispatch as file..."
           cat ${{cloudbees.workspace}}/dispatch_requests.json
       - name: Dispatch Workflows
