@@ -3,11 +3,9 @@ kind: workflow
 name: My workflow
 on:
   workflow_dispatch:
-
 env:
-  ORG_ID: "484e57bd-7b0b-4a37-448b-ab8ca8f9a684"
-  APP_ID: "dcaf825d-c6a1-43bd-8fb6-016e8a66335e"
-
+  ORG_ID: 484e57bd-7b0b-4a37-448b-ab8ca8f9a684
+  APP_ID: dcaf825d-c6a1-43bd-8fb6-016e8a66335e
 jobs:
   release:
     steps:
@@ -31,4 +29,14 @@ jobs:
         uses: cloudbees-io/workflows-dispatch@main
         with:
           workflows-dispatch-file: dispatch_requests.json
-          token: "${{ secrets.CBP_PAT }}"
+          token: ${{ secrets.CBP_PAT }}
+    needs:
+      - ApproveMe
+  ApproveMe:
+    timeout-minutes: 4320
+    delegates: cloudbees-io/manual-approval/custom-job.yml@v1
+    with:
+      approvers: ""
+      disallowLaunchByUser: false
+      notifyAllEligibleUsers: false
+      instructions: Do you want to deploy?
