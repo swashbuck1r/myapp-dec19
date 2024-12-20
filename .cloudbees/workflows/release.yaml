@@ -9,7 +9,7 @@ env:
   APP_ID: "dcaf825d-c6a1-43bd-8fb6-016e8a66335e"
 
 jobs:
-  build:
+  release:
     steps:
       - name: Calculate dispatch JSON
         id: dispatch_json
@@ -24,9 +24,8 @@ jobs:
         shell: bash
         run: |
           echo "Saving dispatch as file..."
-          echo '${{steps.dispatch_json.outputs.dispatch}}'
           echo '${{steps.dispatch_json.outputs.dispatch}}' > dispatch_requests.json
-          echo "dump workspace dispatch as file..."
+          echo "dump workspace dispatch file..."
           cat dispatch_requests.json
       - name: Dispatch Workflows
         uses: cloudbees-io/workflows-dispatch@main
