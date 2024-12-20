@@ -27,9 +27,10 @@ jobs:
           echo "${{steps.dispatch_json.outputs.dispatch}}"
           cat << EOF
           ${{steps.dispatch_json.outputs.dispatch}}
-          EOF | jq > ./dispatch_requests.json
+          EOF
+          | jq > ${{cloudbees.workspace}}/dispatch_requests.json
           echo "dump workspace dispatch as file..."
-          cat ./dispatch_requests.json
+          cat ${{cloudbees.workspace}}/dispatch_requests.json
       - name: Dispatch Workflows
         uses: cloudbees-io/workflows-dispatch@main
         with:
