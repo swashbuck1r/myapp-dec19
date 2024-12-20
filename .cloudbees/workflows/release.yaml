@@ -25,11 +25,11 @@ jobs:
         run: |
           echo "Saving dispatch as file..."
           echo "${{steps.dispatch_json.outputs.dispatch}}"
-          echo "${{steps.dispatch_json.outputs.dispatch}}" > $CLOUDBEES_WORKSPACE/dispatch_requests.json
+          echo "${{steps.dispatch_json.outputs.dispatch}}" > ./dispatch_requests.json
           echo "dump workspace dispatch as file..."
-          cat $CLOUDBEES_WORKSPACE/dispatch_requests.json
+          cat ./dispatch_requests.json
       - name: Dispatch Workflows
         uses: cloudbees-io/workflows-dispatch@main
         with:
-          workflows-dispatch-file: $CLOUDBEES_WORKSPACE/dispatch_requests.json
+          workflows-dispatch-file: ./dispatch_requests.json
           token: "${{ secrets.CBP_PAT }}"
