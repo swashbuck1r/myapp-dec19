@@ -25,7 +25,9 @@ jobs:
         run: |
           echo "Saving dispatch as file..."
           echo "${{steps.dispatch_json.outputs.dispatch}}"
-          echo "${{steps.dispatch_json.outputs.dispatch}}" | jq > ./dispatch_requests.json
+          cat << EOF
+          ${{steps.dispatch_json.outputs.dispatch}}
+          EOF | jq > ./dispatch_requests.json
           echo "dump workspace dispatch as file..."
           cat ./dispatch_requests.json
       - name: Dispatch Workflows
