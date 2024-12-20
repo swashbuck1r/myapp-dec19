@@ -30,3 +30,12 @@ jobs:
         with:
           workflows-dispatch-file: dispatch_requests.json
           token: ${{ secrets.CBP_PAT }}
+    needs:
+      - deployment-approval
+  deployment-approval:
+    timeout-minutes: 4320
+    delegates: cloudbees-io/manual-approval/custom-job.yml@v1
+    with:
+      approvers: 69fe7606-13a7-11eb-b8f1-42010a83ae35
+      disallowLaunchByUser: false
+      instructions: Approved?
