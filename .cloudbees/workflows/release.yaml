@@ -22,8 +22,8 @@ jobs:
         shell: bash
         run: |
           set -x
-          curl -H "Authorization: Bearer ${{ secrets.CBP_PAT }}" -H "Accept: application/json" ${{ cloudbees.api.url }}/v1/organizations/$ORG_ID/services/$APP_ID | jq -r '[.service.linkedComponentIds[] | {"component_id": .,"branch_name": "main", "workflow_file_name": "deploy.yaml"}]' > $CLOUDBEES_OUTPUTS/dispatch.txt
-          cat $CLOUDBEES_OUTPUTS/dispatch.txt
+          curl -H "Authorization: Bearer ${{ secrets.CBP_PAT }}" -H "Accept: application/json" ${{ cloudbees.api.url }}/v1/organizations/$ORG_ID/services/$APP_ID | jq -r '[.service.linkedComponentIds[] | {"component_id": .,"branch_name": "main", "workflow_file_name": "deploy.yaml"}]' > $CLOUDBEES_OUTPUTS/dispatch
+          cat $CLOUDBEES_OUTPUTS/dispatch
       - name: Deploy components
         uses: docker://swashbuck1r/quickstart-tools:0.0.1
         shell: bash
