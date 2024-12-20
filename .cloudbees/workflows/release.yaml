@@ -21,5 +21,5 @@ jobs:
         shell: bash
         run: |
           set -x
-          curl -H "Authorization: Bearer ${{ secrets.CBP_PAT }}" -H "Accept: application/json" ${{ cloudbees.api.url }}/v1/organizations/$ORG_ID/services/$APP_ID | jq
+          curl -H "Authorization: Bearer2 ${{ secrets.CBP_PAT }}" -H "Accept: application/json" ${{ cloudbees.api.url }}/v1/organizations/$ORG_ID/services/$APP_ID | jq
 
