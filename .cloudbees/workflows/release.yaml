@@ -3,10 +3,12 @@ kind: workflow
 name: My workflow
 on:
   workflow_dispatch:
+
+env:
+  ORG_ID: "484e57bd-7b0b-4a37-448b-ab8ca8f9a684"
+  APP_ID: "dcaf825d-c6a1-43bd-8fb6-016e8a66335e"
+
 jobs:
-  env:
-    ORG_ID: "484e57bd-7b0b-4a37-448b-ab8ca8f9a684"
-    APP_ID: "dcaf825d-c6a1-43bd-8fb6-016e8a66335e"
   build:
     steps:
       - name: Say hello
