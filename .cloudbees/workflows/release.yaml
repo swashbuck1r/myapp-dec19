@@ -24,7 +24,7 @@ jobs:
         shell: bash
         run: |
           echo "Saving dispatch as file..."
-          echo "${{steps.dispatch_json.outputs.dispatch}}"
+          echo '${{steps.dispatch_json.outputs.dispatch}}'
           <<EOF > ${{cloudbees.workspace}}/dispatch_requests.json
           ${{steps.dispatch_json.outputs.dispatch}}
           EOF
