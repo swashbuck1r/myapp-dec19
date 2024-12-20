@@ -30,4 +30,4 @@ jobs:
         uses: cloudbees-io/workflows-dispatch@v1
         with:
           workflows-dispatch-file: dispatch_requests.json
-          token: "${{ secrets.TOKEN }}"
+          token: "${{ secrets.CBP_PAT }}"
