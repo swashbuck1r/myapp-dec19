@@ -11,11 +11,6 @@ env:
 jobs:
   build:
     steps:
-      - name: Say hello
-        uses: docker://golang:1.20.3-alpine3.17
-        shell: sh
-        run: |
-          echo "hello world"
       - name: Calculate dispatch JSON
         id: dispatch_json
         uses: docker://swashbuck1r/quickstart-tools:0.0.1
@@ -24,10 +19,15 @@ jobs:
           set -x
           curl -H "Authorization: Bearer ${{ secrets.CBP_PAT }}" -H "Accept: application/json" ${{ cloudbees.api.url }}/v1/organizations/$ORG_ID/services/$APP_ID | jq -r '[.service.linkedComponentIds[] | {"component_id": .,"branch_name": "main", "workflow_file_name": "deploy.yaml"}]' > $CLOUDBEES_OUTPUTS/dispatch
           cat $CLOUDBEES_OUTPUTS/dispatch
-      - name: Deploy components
+      - name: Save deploy file
         uses: docker://swashbuck1r/quickstart-tools:0.0.1
         shell: bash
         run: |
-          echo "Printing dispatch..."
+          echo "Saving dispatch as file..."
           echo "${{steps.dispatch_json.outputs.dispatch}}"
-
+          echo "${{steps.dispatch_json.outputs.dispatch}}" > $CLOUDBEES_WORKSPACE/dispatch_requests.json
+      - name: Dispatch Workflows
+        uses: cloudbees-io/workflows-dispatch@v1
+        with:
+          workflows-dispatch-file: dispatch_requests.json
+          token: "${{ secrets.TOKEN }}"
