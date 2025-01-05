@@ -3,9 +3,12 @@ kind: workflow
 name: service-workflow
 
 on:
-  push:
-    branches:
-      - '**'
+  workflow_call:
+    inputs:
+      my-var:
+        required: false
+        type: string
+        default: "my-default-value"
 
 jobs:
   build:
