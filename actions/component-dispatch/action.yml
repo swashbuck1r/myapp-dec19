@@ -28,7 +28,7 @@ runs:
       shell: bash
       run: |
         set -x
-        curl -H "Authorization: Bearer ${{ inputs.token }}" -H "Accept: application/json" ${{ cloudbees.api.url }}/v1/organizations/$ORG_ID/services/$APP_ID | jq -r '[.service.linkedComponentIds[] | {"component_id": .,"branch_name": "main", "workflow_file_name": "$WORKFLOW_FILE"}]' | jq > $CLOUDBEES_OUTPUTS/dispatch
+        curl -H "Authorization: Bearer ${{ inputs.token }}" -H "Accept: application/json" ${{ cloudbees.api.url }}/v1/organizations/$ORG_ID/services/$APP_ID | jq -r --arg workflow_file "$WORKFLOW_FILE" '[.service.linkedComponentIds[] | {"component_id": .,"branch_name": "main", "workflow_file_name": "\($workflow_file)"}]' | jq > $CLOUDBEES_OUTPUTS/dispatch
         cat $CLOUDBEES_OUTPUTS/dispatch
     - name: Save deploy file
       uses: docker://swashbuck1r/quickstart-tools:0.0.1
