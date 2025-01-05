@@ -9,33 +9,33 @@ env:
 jobs:
   release:
     steps:
-      - name: Calculate dispatch JSON
-        id: dispatch_json
-        uses: docker://swashbuck1r/quickstart-tools:0.0.1
-        shell: bash
-        run: |
-          set -x
-          curl -H "Authorization: Bearer ${{ secrets.CBP_PAT }}" -H "Accept: application/json" ${{ cloudbees.api.url }}/v1/organizations/$ORG_ID/services/$APP_ID | jq -r '[.service.linkedComponentIds[] | {"component_id": .,"branch_name": "main", "workflow_file_name": "deploy.yaml"}]' | jq > $CLOUDBEES_OUTPUTS/dispatch
-          cat $CLOUDBEES_OUTPUTS/dispatch
-      - name: Save deploy file
-        uses: docker://swashbuck1r/quickstart-tools:0.0.1
-        shell: bash
-        run: |
-          echo "Saving dispatch as file..."
-          echo '${{steps.dispatch_json.outputs.dispatch}}' > dispatch_requests.json
-          echo "dump workspace dispatch file..."
-          cat dispatch_requests.json
-      - name: Dispatch Workflows
-        uses: cloudbees-io/workflows-dispatch@main
+      - name: Deploy
+        uses: ./actions/component-dispatch
         with:
-          workflows-dispatch-file: dispatch_requests.json
+          workflows-dispatch-file: deploy.yaml
           token: ${{ secrets.CBP_PAT }}
-    needs:
-      - deployment-approval
-  deployment-approval:
-    timeout-minutes: 4320
-    delegates: cloudbees-io/manual-approval/custom-job.yml@v1
-    with:
-      approvers: 69fe7606-13a7-11eb-b8f1-42010a83ae35
-      disallowLaunchByUser: false
-      instructions: Approved?
+          org-id: ${{ env.ORG_ID }}
+          component-id: ${{ env.APP_ID }}
+
+      # - name: Calculate dispatch JSON
+      #   id: dispatch_json
+      #   uses: docker://swashbuck1r/quickstart-tools:0.0.1
+      #   shell: bash
+      #   run: |
+      #     set -x
+      #     curl -H "Authorization: Bearer ${{ secrets.CBP_PAT }}" -H "Accept: application/json" ${{ cloudbees.api.url }}/v1/organizations/$ORG_ID/services/$APP_ID | jq -r '[.service.linkedComponentIds[] | {"component_id": .,"branch_name": "main", "workflow_file_name": "deploy.yaml"}]' | jq > $CLOUDBEES_OUTPUTS/dispatch
+      #     cat $CLOUDBEES_OUTPUTS/dispatch
+      # - name: Save deploy file
+      #   uses: docker://swashbuck1r/quickstart-tools:0.0.1
+      #   shell: bash
+      #   run: |
+      #     echo "Saving dispatch as file..."
+      #     echo '${{steps.dispatch_json.outputs.dispatch}}'
+      #     echo '${{steps.dispatch_json.outputs.dispatch}}' > dispatch_requests.json
+      #     echo "dump workspace dispatch as file..."
+      #     cat dispatch_requests.json
+      # - name: Dispatch Workflows
+      #   uses: cloudbees-io/workflows-dispatch@main
+      #   with:
+      #     workflows-dispatch-file: dispatch_requests.json
+      #     token: "${{ secrets.CBP_PAT }}"
