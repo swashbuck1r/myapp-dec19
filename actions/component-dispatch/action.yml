@@ -22,8 +22,9 @@ runs:
       id: dispatch_json
       uses: docker://swashbuck1r/quickstart-tools:0.0.1
       env:
-        ORG_ID: 484e57bd-7b0b-4a37-448b-ab8ca8f9a684
-        APP_ID: dcaf825d-c6a1-43bd-8fb6-016e8a66335e
+        ORG_ID: ${{ inputs.org-id }}
+        APP_ID: ${{ inputs.component-id }}
+        WORKFLOW_FILE: ${{ inputs.workflows-dispatch-file }} 
       shell: bash
       run: |
         set -x
