@@ -21,14 +21,12 @@ runs:
     - name: Calculate dispatch JSON
       id: dispatch_json
       uses: docker://swashbuck1r/quickstart-tools:0.0.1
-      env:
-        ORG_ID: ${{ inputs.org-id }}
-        APP_ID: ${{ inputs.component-id }}
-        WORKFLOW_FILE: ${{ inputs.workflows-dispatch-file }} 
       shell: bash
       run: |
         set -x
-        curl -H "Authorization: Bearer ${{ inputs.token }}" -H "Accept: application/json" ${{ cloudbees.api.url }}/v1/organizations/${{ inputs.org-id }}/services/${{ inputs.component-id }} | jq -r --arg workflow_file "${{ inputs.workflows-dispatch-file }}" '[.service.linkedComponentIds[] | {"component_id": .,"branch_name": "main", "workflow_file_name": "\($workflow_file)"}]' | jq > $CLOUDBEES_OUTPUTS/dispatch
+        curl -H "Authorization: Bearer ${{ inputs.token }}" -H "Accept: application/json" ${{ cloudbees.api.url }}/v1/organizations/${{ inputs.org-id }}/services/${{ inputs.component-id }} \
+          | jq -r --arg workflow_file "${{ inputs.workflows-dispatch-file }}" '[.service.linkedComponentIds[] | {"component_id": .,"branch_name": "main", "workflow_file_name": "\($workflow_file)"}]' \
+          | jq > $CLOUDBEES_OUTPUTS/dispatch
         cat $CLOUDBEES_OUTPUTS/dispatch
     - name: Save deploy file
       uses: docker://swashbuck1r/quickstart-tools:0.0.1
