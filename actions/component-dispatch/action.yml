@@ -25,7 +25,7 @@ runs:
       run: |
         set -x
         curl -H "Authorization: Bearer ${{ inputs.token }}" -H "Accept: application/json" ${{ cloudbees.api.url }}/v1/organizations/${{ inputs.org-id }}/services/${{ inputs.component-id }} \
-          | jq -r --arg workflow_file "${{ inputs.workflows-dispatch-file }}" '[.service.linkedComponentIds[] | {"component_id": .,"branch_name": "main", "workflow_file_name": "${{ inputs.workflows-dispatch-file }}"}]' \
+          | jq -r '[.service.linkedComponentIds[] | {"component_id": .,"branch_name": "main", "workflow_file_name": "${{ inputs.workflows-dispatch-file }}"}]' \
           | jq > $CLOUDBEES_OUTPUTS/dispatch
         cat $CLOUDBEES_OUTPUTS/dispatch
     - name: Save deploy file
@@ -36,10 +36,10 @@ runs:
         echo '${{steps.dispatch_json.outputs.dispatch}}' > dispatch_requests.json
         echo "dump workspace dispatch file..."
         cat dispatch_requests.json
-    # - name: Dispatch Workflows
-    #   uses: cloudbees-io/workflows-dispatch@main
-    #   with:
-    #     workflows-dispatch-file: dispatch_requests.json
-    #     token: ${{ inputs.token }}
+    - name: Dispatch Workflows
+      uses: cloudbees-io/workflows-dispatch@v1
+      with:
+        workflows-dispatch-file: dispatch_requests.json
+        token: ${{ inputs.token }}
 
 
